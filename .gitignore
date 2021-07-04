@@ -3,3 +3,5 @@ backend/.DS_Store
 backend/package-lock.json
 backend/src/.DS_Store
 backend/src/cs.code-workspace
+node_modules
+
