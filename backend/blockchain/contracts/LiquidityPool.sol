@@ -2,11 +2,10 @@ pragma solidity ^0.6.11;
 
 import "./FakeUSDC.sol";
 
-contract TokenFarm {
-    string public name = "Dapp Token Farm";
+contract LiquidityPool {
+    string public name = "LiquidityPool";
     address public owner;
-    DappToken public dappToken;
-    DaiToken public daiToken;
+    FakeUSDC public fakeUSDC;
 
     address[] public stakers;
     mapping(address => uint) public stakingBalance;
