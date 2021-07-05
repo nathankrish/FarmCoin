@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon src/index.js"
+    "start": "nodemon src/api/index.js"
   },
   "keywords": [
     "loan",
@@ -15,10 +15,12 @@
   "author": "Krish Nathan, Rhidam Vaikunth, Anoop Patta",
   "license": "MIT",
   "dependencies": {
+    "axios": "^0.21.1",
     "express": "^4.17.1",
     "mongoose": "^5.12.14",
     "nodemon": "^2.0.7",
-    "web3": "^1.4.0"
+    "web3": "^1.4.0",
+    "node-fetch": "^2.6.1"
   },
   "type": "module"
 }
