@@ -1,7 +1,6 @@
-pragma solidity ^0.5.0;
+pragma solidity ^0.6.11;
 
-import "./DappToken.sol";
-import "./DaiToken.sol";
+import "./FakeUSDC.sol";
 
 contract TokenFarm {
     string public name = "Dapp Token Farm";
