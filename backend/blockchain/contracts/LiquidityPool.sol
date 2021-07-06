@@ -1,22 +1,24 @@
 pragma solidity ^0.6.11;
 
-import "./FakeUSDC.sol";
+import "./MockUSDC.sol";
 
 contract LiquidityPool {
     string public name = "LiquidityPool";
-    address public owner;
-    FakeUSDC public fakeUSDC;
+    uint public totalStaked;
+    MockUSDC public mockUSDC;
 
-    address[] public stakers;
-    mapping(address => uint) public stakingBalance;
-    mapping(address => bool) public hasStaked;
-    mapping(address => bool) public isStaking;
+    uint256 public totalStakedUSDC; // Total USDC Liquidity tokens locked
 
-    constructor(DappToken _dappToken, DaiToken _daiToken) public {
-        dappToken = _dappToken;
-        daiToken = _daiToken;
-        owner = msg.sender;
+    struct Staker {
+        uint256 totalDeposited;
+        uint256 totalYield;
+        uint256[2][] totalDeposits;                 // A 2d array of total deposits [[pairCode, batchNumber], [[pairCode, batchNumber], ...]]
+        uint256[][200] initialDepositAmounts;
+        uint256[][200] interestEarnedDeposits;      // A 2d array showing the locked amount of Liquidity tokens in each batch of each Pair Pool
+        uint256[][200] totalValue;                  // A 2d array showing the locked amount of Liquidity tokens in each batch of each Pair Pool, adjusted to LP bubbling factor
     }
+
+    mapping(address => Staker) internal stakers;
 
     function stakeTokens(uint _amount) public {
         // Require amount greater than 0
