@@ -12,6 +12,16 @@ const PlaidLink = ({ token }) => {
   const onSuccess = useCallback(
     (public_token, metadata) => {
       // send public_token to server
+      let data = {
+        public_token: public_token,
+        accounts: metadata.accounts
+      }
+      let options = {
+        headers: {
+        'Content-Type': 'application/json',
+        }
+      };
+      axios.post(backendLink + "/exchangePlaidToCircle", data, options);
     },
     []
   );

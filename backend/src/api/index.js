@@ -58,6 +58,31 @@ app.post('/testMockAcct', async (req, res) => {
   res.json(accountResp);
 });
 
+app.post('/exchangePlaidToCircle', (req, res) => {
+  let handler = async () => {
+    try {
+      const publicToken = req.body.public_token;
+      const accounts = req.body.accounts;
+      const accountId = accounts[0].id;
+      const exchangeTokenResponse = await client.exchangePublicToken(
+        publicToken,
+      );
+      const accessToken = exchangeTokenResponse.access_token;
+      // Create a processor token for a specific account id.
+      const processorTokenResponse = await client.createProcessorToken(
+        accessToken,
+        accountId,
+        'circle',
+      );
+      const processorToken = processorTokenResponse.processor_token;
+      return processorToken;
+    } catch (err) {
+      console.log(err.message)
+    }  
+  }
+  handler().then((token) => console.log(token));
+});
+
 app.get('/', (req, res) => {
   res.send('Hello World!')
 });
