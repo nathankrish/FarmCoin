@@ -16,11 +16,12 @@ const port = 5000;
 app.use(express.json());
 app.use(cors())
 
+const env = (process.env.PLAID_ENV == "sandbox") ? plaid.environments.sandbox : plaid.environments.development;
 
 const client = new plaid.Client({
   clientID: process.env.PLAID_CLIENT_ID,
   secret: process.env.PLAID_SECRET,
-  env: plaid.environments.sandbox,
+  env: env
 });
 
 app.post('/create_link_token', async (request, response) => {
