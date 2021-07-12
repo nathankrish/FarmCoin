@@ -7,7 +7,8 @@
   "repository": "https://github.com/nathankrish/FarmCoin.git",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon src/api/index.js"
+    "start": "nodemon src/api/index.js",
+    "prod": "node src/api/index.js"
   },
   "keywords": [
     "loan",
