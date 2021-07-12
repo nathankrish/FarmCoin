@@ -59,13 +59,15 @@ app.post('/testMockAcct', async (req, res) => {
 
 app.post('/createPayment', async (req, res) => {
   const circle = new CirclePayments(); 
-  let amount = 10;
+  let amount = req.body.amount;
   let account = await circle.fetchBankAcct(id);
   let fetchId = account.data.id;
   let email = account.data.metadata.email;
   let payment = await circle.createPayment(fetchId, amount, email);
-  res.json(payment);
+  let transfer = await circle.transferToWallet(amount);
+  console.log(transfer);
 });
+
 
 app.post('/createPayout', async (req, res) => {
   const circle = new CirclePayments(); 
@@ -105,10 +107,5 @@ app.get('/', (req, res) => {
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
-});
-
-const newPayment = paymentModel.create({
-    amountPaid: 20.50,
-    date: Date.now()
 });
 

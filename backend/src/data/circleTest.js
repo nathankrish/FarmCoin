@@ -45,7 +45,7 @@ class CirclePayments {
             // need to generate the session id's uniquely in future
             sessionId: 'DE6FA86F60BB47B379307F851E238617',
             ipAddress: '244.28.239.130',
-            email: 'satoshi@circle.com'
+            email: 'bobsmith@fakemail.com'
           },
           idempotencyKey: uuidv4(),
           plaidProcessorToken: processorToken
@@ -110,6 +110,32 @@ class CirclePayments {
       return res.json();
     }
 
+    async transferToWallet(amount) {
+      let walletAddress = '0x6f004cf8b555ce49e2dff3d4d16e0145b9d4d841';
+      const url = 'https://api-sandbox.circle.com/v1/transfers';
+      const options = {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${circleApiKey}`
+        },
+        body: JSON.stringify({
+          source: {type: 'wallet', id: masterWalletId},
+          destination: {
+            type: 'blockchain',
+            address: walletAddress,
+            chain: 'ETH'
+          },
+          amount: {amount: amount, currency: 'USD'},
+          idempotencyKey: uuidv4()
+        })
+      };
+      
+      let res = await fetch(url, options);
+      return res.json();
+    }
+
     
     async createPayout(id) {
       const url = 'https://api-sandbox.circle.com/v1/payouts';
@@ -118,13 +144,13 @@ class CirclePayments {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-          Authorization: 'Bearer QVBJX0tFWToyNTlkM2Y3MTk2MjU2NzdjYzEyNGFkYmI0YmZhMjk3ODpiNGY5OWViZDEyZjQ4MjlkNDMzNDIzMjY0NzQwMzY4ZQ=='
+          Authorization: `Bearer ${circleApiKey}`
         },
         body: JSON.stringify({
           source: {type: 'wallet', id: masterWalletId},
           destination: {type: 'ach', id: id},
-          amount: {amount: '3.14', currency: 'USD'},
-          metadata: {beneficiaryEmail: 'satoshi@circle.com'},
+          amount: {amount: amount, currency: 'USD'},
+          metadata: {beneficiaryEmail: 'bobsmith@fakemail.com'},
           idempotencyKey: uuidv4()
         })
       };

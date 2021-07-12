@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import axios from 'axios';
+import { backendLink } from '../../globalvars';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -24,20 +26,20 @@ const useStyles = makeStyles(theme => ({
 const Form_Bank = ({ handleClose }) => {
   const classes = useStyles();
   // create state variables for each input
-  const [name, setName] = useState('');
-  const [city, setCity] = useState('');
-  const [country, setCountry] = useState('');
-  const [address, setAddress] = useState('');
-  const [district, setDistrict] = useState('');
-  const [postalCode, setPostalCode] = useState('');
-  const [email, setEmail] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [name, setName] = useState('Bob Smith');
+  const [city, setCity] = useState('Boston');
+  const [country, setCountry] = useState('US');
+  const [address, setAddress] = useState('100 Money Street');
+  const [district, setDistrict] = useState('MA');
+  const [postalCode, setPostalCode] = useState('01234');
+  const [email, setEmail] = useState('bobsmith@fakemail.com');
+  const [phoneNumber, setPhoneNumber] = useState('+1-123-456-7890');
 
   const handleSubmit = e => {
     const user = {
       name, city, country, address, district, postalCode, email, phoneNumber
     };
-    
+    axios.post(backendLink + '/testMockAcct');
   };
 
   return (

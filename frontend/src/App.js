@@ -7,6 +7,9 @@ import {PlaidWidget} from './components/payments/plaidWidget';
 import { Button } from '@material-ui/core';
 import {ModalDialog} from './components/signup/ModalDialog';
 import { useState } from 'react'
+import SignUpCard from './components/signup/SignUpCard'
+import LendingCard from './components/payments/lendingCard';
+import { Grid, Row } from '@material-ui/core';
 
 function App() {
     // declare a new state variable for modal open
@@ -24,13 +27,15 @@ function App() {
   return (
     <React.Fragment>
       <Navbar></Navbar>
-      <PlaidWidget>
-      </PlaidWidget>
       <TemporaryDrawer></TemporaryDrawer>
-      <Button variant="contained" color="primary" onClick={handleOpen}>
-          Signup
-        </Button>
-        
+      <Grid container direction="row">
+        <Grid item xs = "4">
+        <SignUpCard />    
+        </Grid>
+        <Grid item xs = "4">
+        <LendingCard />    
+        </Grid>
+    </Grid>
         <ModalDialog open={open} handleClose={handleClose} />
     </React.Fragment>
   );

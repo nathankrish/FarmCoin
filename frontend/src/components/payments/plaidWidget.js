@@ -7,8 +7,10 @@ import {
 import { backendLink } from "../../globalvars";
 import axios from 'axios';
 import { Button, Typography } from "@material-ui/core";
+import { useHistory } from 'react-router-dom';
 
 const PlaidLink = ({ token }) => {
+
   const onSuccess = useCallback(
     (public_token, metadata) => {
       // send public_token to server
@@ -27,6 +29,8 @@ const PlaidLink = ({ token }) => {
     []
   );
 
+
+
   const config = {
     token,
     onSuccess,
@@ -37,7 +41,7 @@ const PlaidLink = ({ token }) => {
   const { open, ready, error } = usePlaidLink(config);
 
   return (
-    <Button onClick={() => open()} disabled={!ready}>
+    <Button onClick={() => open()} disabled={!ready} variant="contained" color="primary">
       <Typography>
       Connect a bank account
       </Typography>

@@ -47,7 +47,11 @@ const TemporaryDrawer = (props) => {
       <List>
           <ListItem button key={"Sign Up"}>
             <ListItemIcon><PersonAddIcon /></ListItemIcon>
-            <ListItemText primary={"SignUpPage"} />
+            <ListItemText primary={"Signup Page"} />
+          </ListItem>
+          <ListItem button key={"Lend Money"}>
+            <ListItemIcon><AccountBalanceWalletIcon /></ListItemIcon>
+            <ListItemText primary={"Lend Money"} />
           </ListItem>
           <ListItem button key={"Request Loan"}>
             <ListItemIcon><AttachMoneyIcon /></ListItemIcon>
@@ -57,10 +61,7 @@ const TemporaryDrawer = (props) => {
             <ListItemIcon><PaymentIcon /></ListItemIcon>
             <ListItemText primary={"Repay Loan"} />
           </ListItem>
-          <ListItem button key={"Lend Money"}>
-            <ListItemIcon><AccountBalanceWalletIcon /></ListItemIcon>
-            <ListItemText primary={"Lend Money"} />
-          </ListItem>
+          
          
       </List>
     </div>
