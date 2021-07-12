@@ -12,6 +12,9 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
 import PaymentIcon from '@material-ui/icons/Payment';
+import { Link } from 'react-router-dom';
+import SignUpPage from '../../signup/SignUpPage';
+
 
 const useStyles = makeStyles({
   list: {
@@ -30,6 +33,9 @@ const TemporaryDrawer = (props) => {
     }
     props.setOpen(open);
   };
+  const ListItemComponent  =  () => {
+    return <Link to = "./GitHub/FarmCoin/frontend/src/components/singup/SignUpPage"></Link>
+  }
 
   const list = () => (
     <div
@@ -41,7 +47,11 @@ const TemporaryDrawer = (props) => {
       <List>
           <ListItem button key={"Sign Up"}>
             <ListItemIcon><PersonAddIcon /></ListItemIcon>
-            <ListItemText primary={"Sign Up"} />
+            <ListItemText primary={"Signup Page"} />
+          </ListItem>
+          <ListItem button key={"Lend Money"}>
+            <ListItemIcon><AccountBalanceWalletIcon /></ListItemIcon>
+            <ListItemText primary={"Lend Money"} />
           </ListItem>
           <ListItem button key={"Request Loan"}>
             <ListItemIcon><AttachMoneyIcon /></ListItemIcon>
@@ -51,10 +61,7 @@ const TemporaryDrawer = (props) => {
             <ListItemIcon><PaymentIcon /></ListItemIcon>
             <ListItemText primary={"Repay Loan"} />
           </ListItem>
-          <ListItem button key={"Lend Money"}>
-            <ListItemIcon><AccountBalanceWalletIcon /></ListItemIcon>
-            <ListItemText primary={"Lend Money"} />
-          </ListItem>
+          
          
       </List>
     </div>
