@@ -10,6 +10,7 @@ import { useState } from 'react'
 import SignUpCard from './components/signup/SignUpCard'
 import LendingCard from './components/payments/lendingCard';
 import { Grid, Row } from '@material-ui/core';
+import PoolCard from './components/payments/poolCard';
 
 function App() {
     // declare a new state variable for modal open
@@ -34,6 +35,9 @@ function App() {
         </Grid>
         <Grid item xs = "4">
         <LendingCard />    
+        </Grid>
+        <Grid item xs = "4">
+        <PoolCard />    
         </Grid>
     </Grid>
         <ModalDialog open={open} handleClose={handleClose} />
