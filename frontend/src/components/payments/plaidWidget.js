@@ -14,7 +14,8 @@ const PlaidLink = ({ token }) => {
       // send public_token to server
       let data = {
         public_token: public_token,
-        accounts: metadata.accounts
+        account: metadata.account,
+        metadata: metadata
       }
       let options = {
         headers: {

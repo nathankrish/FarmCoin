@@ -47,24 +47,39 @@ app.post('/create_link_token', async (request, response) => {
   }
 });
 
+let id = null;
+
 app.post('/testMockAcct', async (req, res) => {
   const circle = new CirclePayments(); 
-  let account = {
-    accountNumber: '123456789',
-    routingNumber: '011000028',
-    description: 'My ACH account'
-  };
-  let balance = {amount: '3.14', currency: 'USD'};
-  let accountResp = await circle.createMockAccount(account, balance);  
-  res.json(accountResp);
+  let account = await circle.sampleBankAcct();
+  id = account.data.id;
+  let fetchAccount = await circle.fetchBankAcct(id);
+  res.json(fetchAccount);
 });
+
+app.post('/createPayment', async (req, res) => {
+  const circle = new CirclePayments(); 
+  let amount = 10;
+  let account = await circle.fetchBankAcct(id);
+  let fetchId = account.data.id;
+  let email = account.data.metadata.email;
+  let payment = await circle.createPayment(fetchId, amount, email);
+  res.json(payment);
+});
+
+app.post('/createPayout', async (req, res) => {
+  const circle = new CirclePayments(); 
+  let payout = await circle.createPayout(id);
+  res.json(payout);
+});
+
 
 app.post('/exchangePlaidToCircle', (req, res) => {
   let handler = async () => {
     try {
       const publicToken = req.body.public_token;
-      const accounts = req.body.accounts;
-      const accountId = accounts[0].id;
+      const accountId = req.body.account.id;
+      console.log(req.body.metadata);
       const exchangeTokenResponse = await client.exchangePublicToken(
         publicToken,
       );
