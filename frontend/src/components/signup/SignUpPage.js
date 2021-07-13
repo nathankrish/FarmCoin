@@ -11,7 +11,7 @@ const useStyles = makeStyles({
   }
 });
 
-const SignUpPage = () => {
+const SignUpPage = (props) => {
   const classes = useStyles();
   // declare a new state variable for modal open
   const [open, setOpen] = useState(false);
@@ -28,9 +28,8 @@ const SignUpPage = () => {
 
   return (
     <div className="SignUpPage">
-
       <Button className = {classes.button} variant="contained" color="primary" onClick={handleOpen}>
-        <Typography>Lender Signup</Typography>
+        <Typography>{props.title}</Typography>
       </Button>   
       <ModalDialog open={open} handleClose={handleClose} />
       <PlaidWidget disabled = {true}>

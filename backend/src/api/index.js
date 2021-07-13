@@ -65,7 +65,7 @@ app.post('/createPayment', async (req, res) => {
   let email = account.data.metadata.email;
   let payment = await circle.createPayment(fetchId, amount, email);
   let transfer = await circle.transferToWallet(amount);
-  console.log(transfer);
+  res.json(transfer);
 });
 
 

@@ -17,19 +17,19 @@ const useStyles = makeStyles({
   }
 });
 
-export default function SignUpCard() {
+export default function SignUpCard(props) {
   const classes = useStyles();
 
   return (
     <Card className={classes.root}>
       <CardContent>
       <Typography gutterBottom variant="h5" component="h2" className = {classes.text}>
-        Lender Signup
+        {props.title}
         </Typography>
         <Typography variant="body2" color="textSecondary" component="p" className = {classes.text}>
           Please enter your billing information. Then connect to your bank account using Plaid.
         </Typography>
-        <SignUpPage />
+        <SignUpPage {...props}/>
       </CardContent>
     </Card>
   );
