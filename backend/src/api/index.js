@@ -4,9 +4,11 @@ import express from 'express';
 import mongoose from 'mongoose';
 import {userName, password, databaseName} from '../credentials.js'
 import { CirclePayments } from '../data/circleTest.js';
-import {paymentModel} from '../data/schema.js'
+import {Payments} from '../data/schema.js'
 import plaid from 'plaid';
 import cors from 'cors';
+import userRouter from "./routes/userRouter.js";
+import passport from 'passport';
 
 const mongoConnString = `mongodb+srv://${userName}:${password}@cluster0.t8rmg.mongodb.net/${databaseName}?retryWrites=true&w=majority`;
 await mongoose.connect(mongoConnString, {useNewUrlParser: true, useUnifiedTopology: true});
@@ -14,7 +16,10 @@ await mongoose.connect(mongoConnString, {useNewUrlParser: true, useUnifiedTopolo
 const app = express();
 const port = process.env.PORT || 5000
 app.use(express.json());
-app.use(cors())
+app.use(express.urlencoded({ extended: false }));
+app.use(cors());
+app.use(passport.initialize());
+app.use(passport.session());
 
 const env = (process.env.PLAID_ENV == "sandbox") ? plaid.environments.sandbox : plaid.environments.development;
 
@@ -23,6 +28,8 @@ const client = new plaid.Client({
   secret: process.env.PLAID_SECRET,
   env: env
 });
+
+app.use("/auth/", userRouter);
 
 app.post('/create_link_token', async (request, response) => {
   try {
