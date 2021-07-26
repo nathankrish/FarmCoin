@@ -4,72 +4,94 @@ import "./MockUSDC.sol";
 
 contract LiquidityPool {
     string public name = "LiquidityPool";
-    uint public totalStaked;
+    address public owner;
     MockUSDC public mockUSDC;
-
     uint256 public totalStakedUSDC; // Total USDC Liquidity tokens locked
+    uint256 public monthlyInterest; 
 
-    struct Staker {
-        uint256 totalDeposited;
-        uint256 totalYield;
-        uint256[2][] totalDeposits;                 // A 2d array of total deposits [[pairCode, batchNumber], [[pairCode, batchNumber], ...]]
-        uint256[][200] initialDepositAmounts;
-        uint256[][200] interestEarnedDeposits;      // A 2d array showing the locked amount of Liquidity tokens in each batch of each Pair Pool
-        uint256[][200] totalValue;                  // A 2d array showing the locked amount of Liquidity tokens in each batch of each Pair Pool, adjusted to LP bubbling factor
+    struct Lender {
+        uint256 stakingBalance;
+        uint256 interestAccrued;
+        bool isStaking;
     }
 
-    mapping(address => Staker) internal stakers;
+    mapping(address => Lender) public lenders;
+    address[] lendersAddresses;
 
-    function stakeTokens(uint _amount) public {
+    function stakeUSDC(uint _amount) public {
         // Require amount greater than 0
         require(_amount > 0, "amount cannot be 0");
 
-        // Trasnfer Mock Dai tokens to this contract for staking
-        daiToken.transferFrom(msg.sender, address(this), _amount);
+        // Transfer MockUSDC tokens to this contract for staking
+        mockUSDC.transferFrom(msg.sender, address(this), _amount);
+
+        // Update total liquidity balance
+        totalStakedUSDC = totalStakedUSDC + _amount;
 
         // Update staking balance
-        stakingBalance[msg.sender] = stakingBalance[msg.sender] + _amount;
-
-        // Add user to stakers array *only* if they haven't staked already
-        if(!hasStaked[msg.sender]) {
-            stakers.push(msg.sender);
+        lenders[msg.sender].stakingBalance = lenders[msg.sender].stakingBalance + _amount;
+        
+        //Update staking status and add address to lendersAddresses
+        if (!lenders[msg.sender].isStaking) {
+            lenders[msg.sender].isStaking = true;
+            lendersAddresses.push[msg.sender]
         }
-
-        // Update staking status
-        isStaking[msg.sender] = true;
-        hasStaked[msg.sender] = true;
     }
 
-    // Unstaking Tokens (Withdraw)
-    function unstakeTokens() public {
+    // Unstaking USDC (Withdraw)
+    function unstakeUSDC(uint _amount) public {
         // Fetch staking balance
-        uint balance = stakingBalance[msg.sender];
+        uint256 balance = lenders[msg.sender].stakingBalance;
 
         // Require amount greater than 0
         require(balance > 0, "staking balance cannot be 0");
+        require(_amount <= balance, "unstaking more than your balance");
 
-        // Transfer Mock Dai tokens to this contract for staking
-        daiToken.transfer(msg.sender, balance);
+        // Transfer MockUSDC tokens back to Circle account
+        mockUSDC.transfer(msg.sender, _amount);
 
-        // Reset staking balance
-        stakingBalance[msg.sender] = 0;
+        // Update total liquidity balance
+        totalStakedUSDC = totalStakedUSDC - _amount;
 
-        // Update staking status
-        isStaking[msg.sender] = false;
+        // Update staking balance
+        lenders[msg.sender].stakingBalance = lenders[msg.sender].stakingBalance - _amount;
     }
 
-    // Issuing Tokens
-    function issueTokens() public {
-        // Only owner can call this function
+    // Script issues interest on a monthly basis according to proportion staked compared to pool
+    function issueInterest() public {
+        // Only the owner can call this function
         require(msg.sender == owner, "caller must be the owner");
 
-        // Issue tokens to all stakers
-        for (uint i=0; i<stakers.length; i++) {
-            address recipient = stakers[i];
-            uint balance = stakingBalance[recipient];
-            if(balance > 0) {
-                dappToken.transfer(recipient, balance);
-            }
+        // Issue interest to all lenders
+        for (uint i=0; i<lendersAddresses.length; i++) {
+            address recipient = lendersAddresses[i];
+            uint256 balance = lenders[recipient].stakingBalance;
+            uint256 shareOfInterest = balance/totalStakedUSDC;
+            uint256 interestOwed = shareOfInterest * monthlyInterest;
+            lenders[recipient].stakingBalance = interestOwed + balance;
+            lenders[recipient].interestAccrued = interestOwed + lenders[recipient].interestAccrued;
         }
+        // Add accrued interest for the month to total pool
+        totalStakedUSDC = totalStakedUSDC + monthlyInterest;
+        // Reset monthly interest to 0
+        monthlyInterest = 0;
+    }
+
+    // Issuing USDC Loan
+    function issueLoan(address _account, uint _amount) public {
+        // Transfer MockUSDC tokens to corresponding Circle account
+        mockUSDC.transfer(_account, _amount);
+
+        // Update total liquidity balance
+        totalStakedUSDC = totalStakedUSDC - _amount;
+    }
+
+    // Recieving payment from borrower
+    function recievePayment(address _account, uint _amount) public {
+        // Transfer MockUSDC tokens to corresponding Circle account
+        mockUSDC.transfer(_account, _amount);
+
+        // Update total liquidity balance
+        totalStakedUSDC = totalStakedUSDC - _amount;
     }
 }
