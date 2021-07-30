@@ -15,7 +15,6 @@ function App() {
       <BrowserRouter>
         <Navbar></Navbar>
         <TemporaryDrawer></TemporaryDrawer>
-
              <Switch>
                 <Route exact path="/lendMoney" component={LenderPage}/>
                 <Route exact path="/borrowMoney" component={BorrowerPage}/>

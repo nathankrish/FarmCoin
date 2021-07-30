@@ -1,10 +1,10 @@
-pragma solidity ^0.6.11;
+pragma solidity >=0.6.0 <0.9.0;
 
 import "./MockUSDC.sol";
 
 contract LiquidityPool {
     string public name = "LiquidityPool";
-    address public owner;
+    address payable public owner = payable(msg.sender);
     MockUSDC public mockUSDC;
     uint256 public totalStakedUSDC; // Total USDC Liquidity tokens locked
     uint256 public monthlyInterest; 
@@ -34,7 +34,7 @@ contract LiquidityPool {
         //Update staking status and add address to lendersAddresses
         if (!lenders[msg.sender].isStaking) {
             lenders[msg.sender].isStaking = true;
-            lendersAddresses.push[msg.sender]
+            lendersAddresses.push[msg.sender];
         }
     }
 

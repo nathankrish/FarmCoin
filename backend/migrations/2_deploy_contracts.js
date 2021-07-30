@@ -1,4 +1,5 @@
-const FakeUSDC = artifacts.require('MockUSDC')
+const MockUSDC = artifacts.require('MockUSDC')
+const LiquidityPool = artifacts.requre('LiquidityPool')
 
 module.exports = async function(deployer, network, accounts) {
   // Deploy fake USDC token for testing
