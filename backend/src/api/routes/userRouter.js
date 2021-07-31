@@ -35,7 +35,7 @@ userRouter.post('/', auth.optional, (req, res, next) => {
 //POST login route (optional, everyone has access)
 userRouter.post('/login', auth.optional, (req, res, next) => {
   const { body: { user } } = req;
-
+  console.log(user);
   if(!user.email) {
     return res.status(422).json({
       errors: {
@@ -52,7 +52,7 @@ userRouter.post('/login', auth.optional, (req, res, next) => {
     });
   }
 
-  return passport.authenticate('local', { session: false, failureRedirect: '/auth/login' }, (err, passportUser, info) => {
+  return passport.authenticate('local', { session: false, failureRedirect: '/auth/login'}, (err, passportUser, info) => {
     if(err) {
       return next(err);
     }
@@ -60,11 +60,11 @@ userRouter.post('/login', auth.optional, (req, res, next) => {
     if(passportUser) {
       const user = passportUser;
       user.token = passportUser.generateJWT();
-
-      return res.json({ user: user.toAuthJSON() });
+      console.log('yee');
+      return res.json({user: user.toAuthJSON()});
     }
-
-    return status(400).info;
+    console.log('haw')
+    return res.status(400).info;
   })(req, res, next);
 });
 

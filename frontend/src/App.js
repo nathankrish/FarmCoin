@@ -7,6 +7,7 @@ import LenderPage from './components/pages/LenderPage';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import BorrowerPage from './components/pages/BorrowerPage';
 import InfoPage from './components/pages/InfoPage';
+import Login from './components/signin/login';
 
 function App() {
   return (
@@ -19,7 +20,8 @@ function App() {
              <Switch>
                 <Route exact path="/lendMoney" component={LenderPage}/>
                 <Route exact path="/borrowMoney" component={BorrowerPage}/>
-                <Route path="/" component={InfoPage}/>
+                <Route exact path="/" component={InfoPage}/>
+                <Route exact path = "/login" component = {Login}/>
              </Switch>  
     </BrowserRouter>
   </React.Fragment>
