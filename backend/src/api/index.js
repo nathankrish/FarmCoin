@@ -8,6 +8,7 @@ import {Payments} from '../data/schema.js'
 import plaid from 'plaid';
 import cors from 'cors';
 import userRouter from "./routes/userRouter.js";
+import loginRouter from "./routes/loginRouter.js";
 import passport from 'passport';
 
 const mongoConnString = `mongodb+srv://${userName}:${password}@cluster0.t8rmg.mongodb.net/${databaseName}?retryWrites=true&w=majority`;
@@ -29,7 +30,8 @@ const client = new plaid.Client({
   env: env
 });
 
-app.use("/auth/", userRouter);
+app.use("/auth", loginRouter);
+app.use('/user', passport.authenticate('jwt', { session: false }), secureRouter);
 
 app.post('/create_link_token', async (request, response) => {
   try {
@@ -108,7 +110,8 @@ app.post('/exchangePlaidToCircle', (req, res) => {
   handler().then((token) => console.log(token));
 });
 
-app.get('/', (req, res) => {
+app.get('/', passport.authenticate('local', {}), (req, res, err) => {
+  console.log(err);
   res.send('Hello World!')
 });
 

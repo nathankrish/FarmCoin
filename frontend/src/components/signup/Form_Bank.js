@@ -71,7 +71,12 @@ const Form_Bank = ({ handleClose }) => {
       };
       setSubmitStatus('success');
       setAlertOpen(true);
-      axios.post(backendLink + '/auth/', {user});
+      axios.post(backendLink + '/auth/signup', {user}).then((res) => {
+          axios.post(backendLink + '/auth/login', {user}).then((res) => {
+            let token = res.data.token;
+            localStorage.setItem('token', token);
+          });
+        });
       e.preventDefault();
       setTimeout(handleClose, 1000);
     }
