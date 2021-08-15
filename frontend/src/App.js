@@ -8,23 +8,41 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import BorrowerPage from './components/pages/BorrowerPage';
 import InfoPage from './components/pages/InfoPage';
 import Login from './components/signin/login';
+import ProtectedRoute from './components/auth/ProtectedRoute';
+import { useState, useEffect } from 'react';
+import { asyncLocalStorage } from './components/signin/asyncLocalStorage';
+
 
 function App() {
+  const [auth, setAuth] = useState(false);
+
+  useEffect(() => {
+    const getToken = async () => {
+      const token = await asyncLocalStorage.getItem("token");
+      if (token) setAuth(true);
+    };
+    getToken();
+  }, []);
+
   return (
-   
-    <React.Fragment>
       <BrowserRouter>
         <Navbar></Navbar>
         <TemporaryDrawer></TemporaryDrawer>
-
              <Switch>
-                <Route exact path="/lendMoney" component={LenderPage}/>
-                <Route exact path="/borrowMoney" component={BorrowerPage}/>
-                <Route exact path="/" component={InfoPage}/>
-                <Route exact path = "/login" component = {Login}/>
+                <ProtectedRoute exact path="/lendMoney"  redirectTo = "/login" isLoggedIn={auth}> 
+                  <LenderPage/>
+                </ProtectedRoute>
+                <ProtectedRoute exact path="/borrowMoney" redirectTo = "/login" isLoggedIn={auth}>
+                   <BorrowerPage />
+                  </ProtectedRoute>
+                <ProtectedRoute exact path="/" redirectTo = "/login" isLoggedIn={auth}>
+                    <InfoPage />
+                  </ProtectedRoute>
+                <Route exact path = "/login">
+                  <Login setAuth={setAuth} auth = {auth}></Login>
+                </Route>
              </Switch>  
-    </BrowserRouter>
-  </React.Fragment>
+      </BrowserRouter>
   );
 }
 

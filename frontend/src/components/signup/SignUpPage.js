@@ -32,7 +32,7 @@ const SignUpPage = (props) => {
         <Typography>{props.title}</Typography>
       </Button>   
       <ModalDialog open={open} handleClose={handleClose} />
-      <PlaidWidget disabled = {true}>
+      <PlaidWidget>
       </PlaidWidget>   
     </div>
   );

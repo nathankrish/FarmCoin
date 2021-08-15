@@ -9,6 +9,7 @@ import plaid from 'plaid';
 import cors from 'cors';
 import userRouter from "./routes/userRouter.js";
 import loginRouter from "./routes/loginRouter.js";
+import secureRouter from "./routes/secureRoutes.js";
 import passport from 'passport';
 
 const mongoConnString = `mongodb+srv://${userName}:${password}@cluster0.t8rmg.mongodb.net/${databaseName}?retryWrites=true&w=majority`;

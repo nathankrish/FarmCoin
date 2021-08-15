@@ -61,7 +61,10 @@ const signInPage = ({ handleClose }) => {
             const user = {
                 email, password
             };
-            let submitResponse = axios.post(backendLink + '/auth/login', {user});
+            let submitResponse = axios.post(backendLink + '/auth/login', {user}).then(res => {
+                let token = res.data.token;
+                localStorage.setItem('token', token);    
+            });
             if(submitResponse.errors.email === 'is required' || submitResponse.errors.password === 'is required'){
                 setSubmitStatus('email');
                 setAlertOpen(true);

@@ -4,6 +4,9 @@ import axios from 'axios';
 import { backendLink } from '../../globalvars';
 import { makeStyles } from '@material-ui/core';
 import { withStyles } from "@material-ui/core/styles";
+import { Redirect } from "react-router";
+import { asyncLocalStorage } from "./asyncLocalStorage";
+
 
 const useStyles = theme => ({
     root: {
@@ -26,25 +29,32 @@ const useStyles = theme => ({
 class Login extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { email: "", password:"", authflag:1 };
+        this.state = { email: "", password:"", authflag:1};
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-}
+    }
 
     handleChange(event) {
-        this.setState({ email: event.state.email, password: event.state.password });
+        this.setState({ email: event.state.email, password: event.state.password});
     }
-        handleSubmit(event) {
-            event.preventDefault();
-            let user = {email: this.state.email, password: this.state.password};
-            let submitResponse = axios.post(backendLink + '/auth/login', {user});
-            submitResponse.then(e => {
-              //window.location.href="/"; 
-              console.log(e);
-            }).catch(e => alert('Incorrect Credntials!'));
-
+    async handleSubmit(event) {
+        event.preventDefault();
+        let user = {email: this.state.email, password: this.state.password};
+        try {
+          let res = await axios.post(backendLink + '/auth/login', {user});
+          let token = res.data.token;
+          await asyncLocalStorage.setItem(
+            "token",
+          token);
+          window.location.href="/";   
+        } catch (err) {
+          console.log(err);
         }
+    }
     render() {
+      if (this.props.auth) {
+        return <Redirect to="/"/>
+      } else {
       const { classes } = this.props;
         return (
             <div className={classes.root}>
@@ -123,7 +133,8 @@ class Login extends React.Component {
             </Grid>
             </Grid>
             </div>
-);
-}
-}
+            );
+          }
+      }
+    }
 export default withStyles(useStyles, { withTheme: true })(Login);

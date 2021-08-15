@@ -3,9 +3,9 @@ import express from 'express';
 import auth from '../auth.js';
 import {Users} from '../../data/schema.js';
 import {} from '../passportConfig.js';
-const loginRouter = express.Router();
 import jwt from 'jsonwebtoken';
 
+const loginRouter = express.Router();
 loginRouter.post(
   '/signup',
   passport.authenticate('signup', { session: false }),

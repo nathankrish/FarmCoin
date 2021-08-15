@@ -18,7 +18,6 @@ class CirclePayments {
           account, balance
         })
       };
-      
       let res = await fetch(url, options)
       return res.json();
     }
